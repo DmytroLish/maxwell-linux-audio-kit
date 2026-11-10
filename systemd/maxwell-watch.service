@@ -1,0 +1,11 @@
+[Unit]
+Description=Maxwell dongle hot-plug watcher (event-driven reconcile)
+After=pipewire.service wireplumber.service
+
+[Service]
+ExecStart=%h/.local/bin/maxwell-watch.sh
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=VB: headset mic to Team bus (optional)
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+
+[Service]
+ExecStart=/usr/sbin/pw-loopback -n vb-team-mic -c 1 -m "[ FC ]" -C maxwell-mic -P VB-Team
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=VB: music bus to Team mic bus
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+
+[Service]
+ExecStart=/usr/sbin/pw-loopback -n vb-team-music -C VB-Music -i stream.capture.sink=true -P VB-Team -o target.object=VB-Team
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=VB: game bus to Maxwell Game
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+
+[Service]
+ExecStart=/usr/sbin/pw-loopback -n vb-ear-game -C VB-Game -i stream.capture.sink=true -P maxwell-game -o target.object=maxwell-game
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

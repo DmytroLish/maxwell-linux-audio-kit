@@ -1,0 +1,12 @@
+[Unit]
+Description=VB: music bus to Maxwell Chat (ears)
+After=pipewire.service wireplumber.service
+Requires=pipewire.service
+
+[Service]
+ExecStart=/usr/sbin/pw-loopback -n vb-ear-music -C VB-Music -i stream.capture.sink=true -P maxwell-chat -o target.object=maxwell-chat
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

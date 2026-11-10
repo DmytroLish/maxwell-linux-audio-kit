@@ -1,0 +1,7 @@
+[Unit]
+Description=Audio stack watchdog (restarts PipeWire stack only when provably broken)
+After=pipewire.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/audio-watchdog.sh
