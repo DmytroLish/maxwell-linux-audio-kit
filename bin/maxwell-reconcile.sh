@@ -26,13 +26,13 @@ vol_pct() { # node.name -> int percent via wpctl
 }
 
 snapshot_levels() {
-  local g c m eg em tmp
+  local g c m eg tmp
   g=$(vol_pct maxwell-game); c=$(vol_pct maxwell-chat); m=$(vol_pct maxwell-mic)
-  eg=$(vol_pct output.vb-ear-game); em=$(vol_pct output.vb-ear-music)
-  [ -z "$g$c$m$eg$em" ] && return 0
+  eg=$(vol_pct output.vb-ear-game)
+  [ -z "$g$c$m$eg" ] && return 0
   tmp="$LEVELS.tmp"
   { [ -n "$g" ] && echo "GAME=$g"; [ -n "$c" ] && echo "CHAT=$c"; [ -n "$m" ] && echo "MIC=$m"
-    [ -n "$eg" ] && echo "EARGAME=$eg"; [ -n "$em" ] && echo "EARMUSIC=$em"; } > "$tmp" && mv "$tmp" "$LEVELS"
+    [ -n "$eg" ] && echo "EARGAME=$eg"; } > "$tmp" && mv "$tmp" "$LEVELS"
 }
 
 set_vol() { # node.name percent
@@ -49,8 +49,7 @@ apply_levels() {
   [ -n "${CHAT:-}" ] && set_vol maxwell-chat "$CHAT"
   [ -n "${MIC:-}" ] && set_vol maxwell-mic "$MIC"
   [ -n "${EARGAME:-}" ] && set_vol output.vb-ear-game "$EARGAME"
-  [ -n "${EARMUSIC:-}" ] && set_vol output.vb-ear-music "$EARMUSIC"
-  log "levels applied: game=${GAME:-?} chat=${CHAT:-?} mic=${MIC:-?} eargame=${EARGAME:-?} earmusic=${EARMUSIC:-?}"
+  log "levels applied: game=${GAME:-?} chat=${CHAT:-?} mic=${MIC:-?} eargame=${EARGAME:-?}"
 }
 
 pw-cli info >/dev/null 2>&1 || { log "pipewire not reachable; nothing to do"; exit 0; }
@@ -77,8 +76,6 @@ create_nodes() {
 repair_links() {
   pw-link output.vb-ear-game:output_FL maxwell-game:playback_FL 2>/dev/null
   pw-link output.vb-ear-game:output_FR maxwell-game:playback_FR 2>/dev/null
-  pw-link output.vb-ear-music:output_FL maxwell-chat:playback_FL 2>/dev/null
-  pw-link output.vb-ear-music:output_FR maxwell-chat:playback_FR 2>/dev/null
   pw-link maxwell-mic:capture_MONO input.vb-team-mic:input_MONO 2>/dev/null
   pw-link -d maxwell-mic:capture_MONO maxwell-game:playback_FL 2>/dev/null
   pw-link -d maxwell-mic:capture_MONO maxwell-game:playback_FR 2>/dev/null

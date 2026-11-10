@@ -38,8 +38,9 @@ self-healing — no more dead audio stack because the headset was off.
   noise from a plug event the reconciler is handling is never a restart
   reason. After a heal it reconciles the Maxwell nodes and unmutes streams.
 - **Optional VoiceMeeter-style buses** (`--with-buses`): three virtual sinks
-  (Game / Music / Team) routed into the Maxwell's separate Game and Chat
-  channels with `pw-loopback` units. See `optional-vb-buses/README.md`.
+  (Game / Music / Team). The Game bus routes to the Maxwell Game channel;
+  the Music bus is deliberately **not** routed to the Chat channel. See
+  `optional-vb-buses/README.md`.
 
 ## Requirements
 

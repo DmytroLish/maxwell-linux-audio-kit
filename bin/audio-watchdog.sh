@@ -15,7 +15,7 @@ mkdir -p "$LOGDIR"
 # Level memory: snapshot the Maxwell channel volumes so a heal restores
 # the levels last set, not a stale restore.
 ~/.local/bin/maxwell-reconcile.sh --snapshot >/dev/null 2>&1
-UNITS="pipewire.service pipewire-pulse.service wireplumber.service vb-ear-game.service vb-ear-music.service vb-team-music.service vb-team-mic.service"
+UNITS="pipewire.service pipewire-pulse.service wireplumber.service vb-ear-game.service vb-team-music.service vb-team-mic.service"
 SOCKETS="pipewire.socket pipewire-pulse.socket"
 # Guard only units that exist on this system (the vb-* units come with the
 # optional buses; a core-only install must not read them as "broken").

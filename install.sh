@@ -9,6 +9,16 @@ WITH_BUSES=0
 mkdir -p "$HOME/.local/bin" "$HOME/.config/systemd/user" \
          "$HOME/.local/share/maxwell-reconcile" "$HOME/.local/share/audio-watchdog"
 
+
+# Public builds do not route VB-Music to the Maxwell Chat channel. Remove the
+# legacy vb-ear-music unit from earlier installs so an upgrade cannot keep
+# that route alive.
+if [ -f "$HOME/.config/systemd/user/vb-ear-music.service" ]; then
+  systemctl --user disable --now vb-ear-music.service >/dev/null 2>&1 || true
+  rm -f "$HOME/.config/systemd/user/vb-ear-music.service"
+  echo "removed legacy vb-ear-music unit (music is not routed to Chat)"
+fi
+
 install -m 0755 "$KIT/bin/maxwell-reconcile.sh" "$HOME/.local/bin/"
 install -m 0755 "$KIT/bin/maxwell-watch.sh"     "$HOME/.local/bin/"
 install -m 0755 "$KIT/bin/audio-watchdog.sh"    "$HOME/.local/bin/"
@@ -33,7 +43,7 @@ fi
 if [ "$WITH_BUSES" = 1 ]; then
   mkdir -p "$CONFD"
   install -m 0644 "$KIT/optional-vb-buses/40-vb-buses.conf" "$CONFD/"
-  for u in vb-ear-game vb-ear-music vb-team-music vb-team-mic; do
+  for u in vb-ear-game vb-team-music vb-team-mic; do
     install -m 0644 "$KIT/optional-vb-buses/$u.service" "$HOME/.config/systemd/user/"
   done
 fi
@@ -41,7 +51,7 @@ fi
 systemctl --user daemon-reload
 systemctl --user enable --now maxwell-watch.service audio-watchdog.timer
 if [ "$WITH_BUSES" = 1 ]; then
-  systemctl --user enable --now vb-ear-game vb-ear-music vb-team-music vb-team-mic
+  systemctl --user enable --now vb-ear-game vb-team-music vb-team-mic
   echo "NOTE: the VB buses conf loads at pipewire start - restart it once:"
   echo "  systemctl --user restart pipewire wireplumber"
 fi
